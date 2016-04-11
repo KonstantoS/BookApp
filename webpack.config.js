@@ -1,38 +1,82 @@
-var path    = require('path');
-var webpack = require('webpack');
+const webpack = require('webpack');
+//const HtmlPlugin = require('html-webpack-plugin');
+//const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-module.exports = {
-    entry:  [
-        'webpack-dev-server/client?http://localhost:8080/',
-        'webpack/hot/only-dev-server',
-        './client'
-    ],
+const files = {
+    entry: __dirname + '/src/App.js',
+    outputPath: __dirname + '/public/js',
+    outputPublicpath: '/js/',
+    outputFilename: 'bundle.js',
+
+
+    htmlTemplate: __dirname + '/src/index.html',
+    cssPath: 'styles/styles.[chunkhash].css',
+
+
+    outputFilenameDev: 'javascript/bundle.js',
+    cssPathDev: 'styles/styles.css'
+};
+
+const base = {
+    entry: files.entry,
     output: {
-        path:     path.join(__dirname, 'dist'),
-        filename: 'bundle.js'
-    },
-    resolve: {
-        modulesDirectories: ['node_modules', 'shared'],
-        extensions:        ['', '.js', '.jsx']
+        path: files.outputPath,
+        filename: files.outputFilename,
+        publicPath: files.outputPublicpath
     },
     module: {
         loaders: [
             {
-                test:    /\.jsx?$/,
+                test: /\.jsx?$/,
+                include: /src/,
                 exclude: /node_modules/,
-                loaders: ['react-hot', 'babel']
+                loader: 'babel',
+                query: {
+                    presets: ['es2015', 'react']
+                }
+            },
+            {
+                test: /\.html$/,
+                loader: 'html'
+            },
+            {
+                test: /\.css$/,
+                loader: 'style!css'
             }
+            /*{
+                test: /\.scss$/,
+                loader: ExtractTextPlugin.extract('style', 'css!sass')
+            }*/
         ]
     },
+    resolve: {
+        extensions: ['', '.js', '.jsx']
+    },
     plugins: [
-        new webpack.HotModuleReplacementPlugin(),
-        new webpack.NoErrorsPlugin()
-    ],
-    devtool: 'inline-source-map',
-    devServer: {
-        hot: true,
-        proxy: {
-            '*': 'http://localhost:' + (process.env.PORT || 3000)
-        }
-    }
-};
+        /*new HtmlPlugin({
+            template: files.htmlTemplate,
+            minify: {
+                collapseWhitespace: true
+            }
+        })*/
+    ]
+};/*
+
+if (process.env.NODE_ENV === 'production') {
+    module.exports = base;
+    module.exports.plugins = module.exports.plugins.concat([
+        new webpack.DefinePlugin({
+            'process.env': {
+                NODE_ENV: JSON.stringify('production')
+            }
+        }),
+        new webpack.optimize.DedupePlugin(),
+        new webpack.optimize.UglifyJsPlugin({ output: { comments: false } }),
+        new ExtractTextPlugin(files.cssPath)
+    ]);
+} else if (process.env.NODE_ENV === 'development') {
+    module.exports = base;
+    module.exports.output.filename = files.outputFilenameDev;
+    module.exports.plugins.push(new ExtractTextPlugin(files.cssPathDev));
+}*/
+module.exports = base;

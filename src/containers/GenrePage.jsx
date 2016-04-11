@@ -1,38 +1,28 @@
 import React, { PropTypes } from 'react'
+import { SortDirBlock, SortFieldBlock } from '../components/SortBlocks'
 import { connect } from 'react-redux'
+import GenredBooks from './GenredBooks'
 import fetchBooksData from '../actions/booksActions'
 import fetchAuthorsData from '../actions/authorsActions'
 import fetchGenresData from '../actions/genresActions'
-import SingleBook from '../components/SingleBook'
-import { LEFT_JOIN } from '../lib/data'
 
-class BookPage extends React.Component{
+class GenrePage extends React.Component{
     constructor(props){
         super(props);
-        this.extractItemFromData = this.extractItemFromData.bind(this);
-    }
-    componentWillMount(){
         const { dispatch } = this.props;
         dispatch(fetchBooksData());
         dispatch(fetchGenresData());
         dispatch(fetchAuthorsData());
     }
-    extractItemFromData(){
-        const {id, books,authors,genres} = this.props;
-
-        return LEFT_JOIN(
-            LEFT_JOIN([books.items.find(book => {return book.id == id})],authors.items,"author","id"),
-            genres.items,
-            "genre","id")[0];
-    }
     render(){
-        const {books, authors, genres} = this.props;
+        const {id, books, authors, genres} = this.props;
+
         if( books.isFetching ||
-            authors.isFetching ||
             genres.isFetching ||
+            authors.isFetching ||
             books.items.length == 0 ||
-            authors.items.length == 0 ||
-            genres.items.length == 0
+            genres.items.length == 0 ||
+            authors.items.length == 0
         ) {
             return (
                 <div className="wait-handler centered container">
@@ -42,14 +32,27 @@ class BookPage extends React.Component{
         }
         return(
             <div className="centered container">
-                <SingleBook item={this.extractItemFromData()}/>
+                <h1>{genres.items.find(genre=> genre.id == id).title}</h1>
+                <div className="sorting-blocks">
+                    <SortFieldBlock />
+                    <SortDirBlock />
+                </div>
+                <div>
+                    <GenredBooks genreID={id} />
+                </div>
             </div>
         );
     }
 }
-
-BookPage.propTypes = {
-    id: PropTypes.string.isRequired,
+export const mapStateToProps = (state, ownProps) => {
+    return{
+        id:ownProps.params.id,
+        books: state.app.books,
+        authors: state.app.authors,
+        genres: state.app.genres
+    }
+};
+GenrePage.propTypes = {
     authors: PropTypes.shape({
         isFetching: PropTypes.bool.isRequired,
         items: PropTypes.arrayOf(PropTypes.shape({
@@ -79,13 +82,5 @@ BookPage.propTypes = {
     dispatch: PropTypes.func.isRequired
 };
 
-const mapStateToProps = (state, ownProps) => {
-    return{
-        id: ownProps.params.id,
-        books: state.app.books,
-        authors: state.app.authors,
-        genres: state.app.genres
-    }
-};
+export default connect(mapStateToProps)(GenrePage);
 
-export default connect(mapStateToProps)(BookPage);

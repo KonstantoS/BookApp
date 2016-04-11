@@ -5,9 +5,9 @@ export const setFilter = (field) => {
     }
 };
 
-export const setSortType = (vector) => {
+export const setSortType = (direction) => {
     return {
         type: 'SET_FILTER_TYPE',
-        vector
+        direction
     }
 };

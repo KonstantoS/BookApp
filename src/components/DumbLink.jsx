@@ -6,7 +6,7 @@ export default class DumbLink extends React.Component{
         const {children,active,onClick} = this.props;
 
         if (active) {
-            return <span>{ children }</span>
+            return <span className="inactive">{ children }</span>
         }
         return(
             <a href="#" onClick={e => {e.preventDefault(); onClick();}}>

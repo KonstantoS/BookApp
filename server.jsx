@@ -1,25 +1,37 @@
 import express from 'express';
+import path from 'path';
 
+import webpack from 'webpack'
+import webpackDevMiddleware from 'webpack-dev-middleware'
+import webpackConfig from './webpack.config'
+
+import React from 'react'
+import { renderToString } from 'react-dom/server'
+import { Provider } from 'react-redux'
+//import './src/index.html'
+
+/*import configureStore from '../common/store/configureStore'
+ import App from '../common/containers/App'
+ import { fetchCounter } from '../common/api/counter'
+ */
 
 const app = express();
 
-app.use((req, res) => {
-    const HTML = `
-  <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>BookApp</title>
-</head>
-<body>
-<div id="root">
-</div>
-<script type="application/javascript" src="/bundle.js"></script>
-</body>
-</html>
-  `;
+const compiler = webpack(webpackConfig);
 
-    res.end(HTML);
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(webpackDevMiddleware(compiler, { noInfo: true, publicPath: webpackConfig.output.publicPath }));
+
+const handleRender = (req,res) => {
+    //AsyncFunction
+    res.sendFile(__dirname + '/index.html');
+};
+
+app.use(handleRender);
+
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT,()=>{
+    console.log(`Server listening on ${PORT}`);
 });
-
-export default app;

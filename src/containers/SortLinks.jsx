@@ -31,7 +31,7 @@ const mapStateToSortFieldProps = (state, componentProps) => {
 const mapDispatchToSortFieldProps = (dispatch, componentProps) => {
     return {
         onClick: () => {
-            dispatch(setSortType(componentProps.field))
+            dispatch(setFilter(componentProps.field))
         }
     }
 };

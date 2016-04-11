@@ -1,5 +1,4 @@
 import React, { PropTypes } from 'react'
-import { connect } from 'react-redux'
 import BookItem from './BookItem'
 
 export default class BookList extends React.Component{
@@ -22,8 +21,8 @@ BookList.propTypes = {
         author: PropTypes.shape({
             id:PropTypes.number.isRequired,
             name:PropTypes.string.isRequired
-        }).isRequired,
-        desc: PropTypes.string.isRequired,
+        }),
+        desc: PropTypes.string,
         genre: PropTypes.shape({
             id:PropTypes.number.isRequired,
             title:PropTypes.string.isRequired

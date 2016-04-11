@@ -1,22 +1,22 @@
 import 'babel-polyfill'
 
-function requestBooks(){
+function requestGenres(){
     return {
-        type:'REQUEST_BOOKS'
+        type:'REQUEST_GENRES'
     }
 }
-function receiveBooks(json){
+function receiveGenres(json){
     return {
-        type: 'RECEIVE_BOOKS',
-        books: json
+        type: 'RECEIVE_GENRES',
+        genres: json
     }
 }
 
-export default function fetchBooksData(){
+export default function fetchGenresData(){
     return dispatch => {
-        dispatch(requestBooks());
-        return fetch(`${window.location.origin}/data/books.json`)
+        dispatch(requestGenres());
+        return fetch(`${window.location.origin}/data/genres.json`)
             .then(response => response.json())
-            .then(json => dispatch(receiveBooks(json)))
+            .then(json => dispatch(receiveGenres(json)))
     }
 }

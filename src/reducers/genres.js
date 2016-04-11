@@ -1,19 +1,19 @@
-const authors = (state = {
+const genres = (state = {
     isFetching: false,
     items: []
 }, action) => {
     switch(action.type){
-        case 'REQUEST_AUTHORS':
+        case 'REQUEST_GENRES':
             return Object.assign({},state,{
                isFetching: true
             });
-        case 'RECEIVE_AUTHORS':
+        case 'RECEIVE_GENRES':
             return Object.assign({},state,{
                 isFetching: false,
-                items: action.authors
+                items: action.genres
             });
         default:
             return state;
     }
 };
-export default authors;
+export default genres;

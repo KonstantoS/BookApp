@@ -1,9 +1,8 @@
 import React from 'react'
 import { Link } from 'react-router'
-export default () => (
+const Header = () => (
     <header className="header">
-        <div className="container">
-            <div className="container block">
+            <div className="centered container block">
                 <Link to="/" className="header_logo">BookZzz</Link>
                 <nav className="header_menu">
                     <li><Link to="/">Home</Link></li>
@@ -11,6 +10,6 @@ export default () => (
                     <li><Link to="/authors/">Authors</Link></li>
                 </nav>
             </div>
-        </div>
     </header>
 );
+export default Header;
