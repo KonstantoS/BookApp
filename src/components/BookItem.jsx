@@ -20,7 +20,7 @@ export default class BookItem extends React.Component{
                 <Link to={`/books/${id}`}><img src={img} /></Link>
                 <div>
                     <h3><Link to={`/books/${id}`}>{ title }</Link></h3>
-                    { author ? this.renderAuthor() : ""}
+                    { isNaN(author) ? this.renderAuthor() : ""}
                     <p>Genre: <Link to={`/genre/${genre.id}`}>{genre.title}</Link></p>
                 </div>
             </div>
